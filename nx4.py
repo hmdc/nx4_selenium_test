@@ -11,12 +11,22 @@ class NX4:
 
   """This class can run a number of tests on an NX4 web client"""
   def __init__(self, uri, user, passwd):
+    """
+    Starts Firefox.
+    Sets the URI, user, and password.
+    """
     self.driver = webdriver.Firefox()
     self.uri = uri
     self.user = user
     self.passwd = passwd
 
   def _nx4_login(self):
+    """
+    _nx4_login() attempts to load self.uri, login with the specified
+    username and password and also checks whether or not the session
+    list becomes visible after login.
+    """
+
     # Have we displayed the login window?
     driver = self.driver
     uri = self.uri
@@ -53,6 +63,12 @@ class NX4:
       return
 
   def _nx4_existing_session(self):
+    """
+    _nx4_existing_session() checks to see whether a session already
+    exists in the session list. This can only be run after _nx4_login().
+    If a session exists, returns that session element, otherwise returns
+    None.
+    """
     try:
       existing_session = self.driver.find_element_by_name("Research Cloud Environment (RCE)")
     except:
@@ -61,6 +77,12 @@ class NX4:
     return existing_session
 
   def _nx4_terminate_session(self, session):
+    """
+    _nx4_terminat_session() takes a sesion object as an element an
+    termimnates it. This can only be done after _nx4_login() and
+    _nx4_existing_session()
+    """
+
     driver = self.driver
 
     session.click()
@@ -68,7 +90,12 @@ class NX4:
     actions.move_to_element(session).context_click().perform()
     driver.find_element_by_link_text('Terminate session').click()
 
-  def _nx4_start_session(self, session = None):
+  def _nx4_start_session(self, session=None):
+    """
+    _nx4_start_session() either starts or resumes a session, if session
+    is defined as an argument.
+    """
+
     driver = self.driver
     _GLOBAL_TIMEOUT = self._GLOBAL_TIMEOUT
 
@@ -96,8 +123,7 @@ class NX4:
 
     try:
       WebDriverWait(driver, _GLOBAL_TIMEOUT + 15).until(
-          EC.presence_of_element_located((By.ID, 
-          "image_1"))
+          EC.presence_of_element_located((By.ID, "image_1"))
       )
     except:
       print(_msg_fail)
@@ -105,8 +131,10 @@ class NX4:
 
     print(_msg_success)
 
-
   def test_resume_session(self):
+    """test_resume_session() resumes an NX4 session. If no session is
+    present, starts a new session and then resumes"""
+
     self._nx4_login()
     existing_session = self._nx4_existing_session()
     if existing_session:
@@ -117,6 +145,9 @@ class NX4:
       self.test_resume_session()
 
   def test_new_session(self):
+    """test_new_session() starts a new session and terminates a session
+    if already present."""
+
     # Try to login
     self._nx4_login()
     
