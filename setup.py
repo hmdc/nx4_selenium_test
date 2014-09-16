@@ -1,4 +1,4 @@
-from setuptools import setup
+from distutils.core import setup
 
 setup(name='nx4_selenium_test',
       version='0.1',
@@ -9,8 +9,5 @@ setup(name='nx4_selenium_test',
       author_email='esarmien@g.harvard.edu',
       license='MIT',
       packages=['nx4_selenium_test'],
-      install_requires=[
-        'selenium',
-      ],
-      zip_safe=False)
-
+      requires=['selenium']
+)
