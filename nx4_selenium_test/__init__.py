@@ -1,1 +1,1 @@
-from .test import NX4WebClient
+from .web import client as NX4WebClient

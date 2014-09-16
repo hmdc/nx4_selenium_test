@@ -9,8 +9,8 @@ Setup
 * pip install selenium --user
 
 ```python
-from nx4 import NX4
-x=NX4('http://dev-rce.hmdc.harvard.edu', 'USER', 'PASSWORD')
+from nx4_selenium_test import NX4WebClient
+x=NX4WebClient('http://dev-rce.hmdc.harvard.edu', 'USER', 'PASSWORD')
 x.test_resume_session()
 x.test_new_session()
 ```
