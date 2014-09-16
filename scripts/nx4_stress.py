@@ -75,7 +75,7 @@ if __name__ == '__main__':
                       help="Usernames separated by a space")
   parser.add_argument('-p', '--passwd', required=True,
                       help="Username password")
-  parser.add_argument('-i', '--iterations', type=True,
+  parser.add_argument('-i', '--iterations', required=True, type=int,
                       help="Number of iterations")
 
   args = parser.parse_args()
