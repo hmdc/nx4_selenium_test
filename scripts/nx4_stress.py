@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 from nx4_selenium_test import NX4WebClient
 from time import sleep
 import signal
