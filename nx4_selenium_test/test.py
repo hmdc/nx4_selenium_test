@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-class client:
+class NX4WebClient:
   _GLOBAL_TIMEOUT = 30
 
   """This class can run a number of tests on an NX4 web client"""
