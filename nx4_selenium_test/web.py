@@ -47,9 +47,6 @@ class client:
       print("** Unable to login. Timeout exceeded.")
       return
 
-    # Login
-    print "Logging in with " + user + "/" + passwd
-
     # Clear both L/P
     login_element.clear()
     password_element.clear()
