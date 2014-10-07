@@ -48,6 +48,12 @@ class client:
       return
 
     # Login
+    print "Logging in with " + user + "/" + passwd
+
+    # Clear both L/P
+    login_element.clear()
+    password_element.clear()
+
     login_element.send_keys(user)
     password_element.send_keys(passwd)
     login_element.send_keys(Keys.RETURN)
@@ -70,7 +76,7 @@ class client:
     None.
     """
     try:
-      existing_session = self.driver.find_element_by_name("Research Cloud Environment (RCE)")
+      existing_session = self.driver.find_element_by_name("Research Computing Environment (RCE)")
     except:
       existing_session = None
 
@@ -109,6 +115,22 @@ class client:
       _msg_start = "** Starting new session"
       _msg_fail = "** Session unable to be started. Timeout hit."
       _msg_success = "** Session started successfully."
+
+      print("Waiting for the new desktop button..")
+
+      # NoMachine thinks they're clever by making this more difficult,
+      # but, I found it. I'm pretty sure I can crash their poorly
+      # designed application some more.
+
+      _new_desktop_click = driver.find_element_by_xpath('/html/body/div[1]/div[3]/div/div[1]/div[2]/div[1]/div[2]/span')
+
+      #_new_desktop_click = WebDriverWait(driver, _GLBOAL_TIMEOUT).until(
+      #    EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div[1]/div[2]/div[1]/div[2]/span'))
+      #    )
+
+      print("Clicking new desktop button..")
+
+      _new_desktop_click.click()
 
       _session = WebDriverWait(driver, _GLOBAL_TIMEOUT).until(
           EC.presence_of_element_located((By.ID, 'unix-xsession-default'))
