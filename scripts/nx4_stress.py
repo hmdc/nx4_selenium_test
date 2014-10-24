@@ -90,7 +90,7 @@ if __name__ == '__main__':
 
   for usr in _users:
     lp_obj = {
-        'test': test_new_session_loop,
+        'test': test_resume_session_loop,
         'uri': _uri,
         'user': usr,
         'passwd': _passwd,
