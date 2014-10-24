@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name='nx4_selenium_test',
-      version='0.2',
+      version='0.3',
       description='Provides a Python class and apps which monitor\
       and/or stress-test the NoMachine NX4 web interface',
       url='https://github.com/hmdc/nx4_selenium_test',
