@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import os
 
 
 class client:
@@ -19,6 +20,10 @@ class client:
     self.uri = uri
     self.user = user
     self.passwd = passwd
+    self.pid = os.getpid()
+
+  def done(self):
+    self.driver.quit()
 
   def _nx4_login(self):
     """
@@ -44,7 +49,7 @@ class client:
           EC.presence_of_element_located((By.ID, 'nxserverpass'))
       )
     except:
-      print("** Unable to login. Timeout exceeded.")
+      print("[%d]:result:nx4_login=-1,NO_LOGIN_ELEMENTS_TIMEOUT_EXCEEDED." %(self.pid))
       return
 
     # Clear both L/P
@@ -54,7 +59,8 @@ class client:
     login_element.send_keys(user)
     password_element.send_keys(passwd)
     login_element.send_keys(Keys.RETURN)
-    print("** Logging in to " + uri + "\n")
+
+    print("[%d]:info:Logging in to %s" %(self.pid, self.uri))
 
     # Wait until we see the 'CONNECT' button, somewhere.
     try:
@@ -62,7 +68,7 @@ class client:
           EC.presence_of_element_located((By.ID, 'group_button_session_owner'))
       )
     except:
-      print("** Unable to display session list. Timeout hit.")
+      print("[%d]:result:nx4_login=-1,NO_SESSION_LIST_TIMEOUT_EXCEEDED" %(self.pid))
       return
 
   def _nx4_existing_session(self):
@@ -103,31 +109,33 @@ class client:
     _GLOBAL_TIMEOUT = self._GLOBAL_TIMEOUT
 
     if session:
-      _msg_start = "** Resuming session"
-      _msg_fail = "** Session unable to be resumed. Timeout hit."
-      _msg_success = "** Session resumed successfully."
+      _function = "nx4_resume_session"
+      _msg_start = "Resuming session"
+      _msg_fail = "Session unable to be resumed. Timeout hit."
+      _msg_success = "Session resumed successfully."
 
       _session = session
     else:
-      _msg_start = "** Starting new session"
-      _msg_fail = "** Session unable to be started. Timeout hit."
-      _msg_success = "** Session started successfully."
+      _function = "nx4_start_session"
+      _msg_start = "Starting new session"
+      _msg_fail = "Session unable to be started. Timeout hit."
+      _msg_success = "Session started successfully."
 
-      print("Waiting for the new desktop button..")
+      #print("Waiting for the new desktop button..")
 
       # NoMachine thinks they're clever by making this more difficult,
       # but, I found it. I'm pretty sure I can crash their poorly
       # designed application some more.
 
-      _new_desktop_click = driver.find_element_by_xpath('/html/body/div[1]/div[3]/div/div[1]/div[2]/div[1]/div[2]/span')
+      #_new_desktop_click = driver.find_element_by_xpath('/html/body/div[1]/div[3]/div/div[1]/div[2]/div[1]/div[2]/span')
 
       #_new_desktop_click = WebDriverWait(driver, _GLBOAL_TIMEOUT).until(
       #    EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[3]/div/div[1]/div[2]/div[1]/div[2]/span'))
       #    )
 
-      print("Clicking new desktop button..")
+      print ("[%d]:info:clicking new desktop button" %(self.pid))
 
-      _new_desktop_click.click()
+      #_new_desktop_click.click()
 
       _session = WebDriverWait(driver, _GLOBAL_TIMEOUT).until(
           EC.presence_of_element_located((By.ID, 'unix-xsession-default'))
@@ -138,17 +146,22 @@ class client:
     opButton = driver.find_element_by_id("opButton")
     opButton.click()
 
-    print(_msg_start)
+    print ("[%d]:info:%s" %(self.pid, _msg_start))
 
     try:
       WebDriverWait(driver, _GLOBAL_TIMEOUT + 15).until(
           EC.presence_of_element_located((By.ID, "image_1"))
       )
     except:
-      print(_msg_fail)
-      return
+      try:
+        # <img src="/nxplayer/images/shared/equalizer.png"
+        # style="float:left;margin-top:9px;margin-left:2px;width:104px;">
+        driver.find_element_by_css_selector("img[src='/nxplayer/images/shared/equalizer.png']")
+      except:
+        print("[%d]:result:%s=-1,%s" %(self.pid,_function,_msg_fail))
+        return
 
-    print(_msg_success)
+    print("[%d]:result:%s=1,%s" %(self.pid,_function,_msg_success))
 
   def test_resume_session(self):
     """test_resume_session() resumes an NX4 session. If no session is

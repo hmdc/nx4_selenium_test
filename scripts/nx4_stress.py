@@ -15,6 +15,8 @@ def test_new_session_loop(client, uri, user, passwd, iterations=10):
     except:
       pass
 
+
+
 def test_resume_session_loop(client, uri, user, passwd, iterations=10):
 
   for i in range (0, iterations):
@@ -27,7 +29,8 @@ def test_resume_session_loop(client, uri, user, passwd, iterations=10):
 
 
 def test_new_resume_delay_loop(client, uri, user, passwd, iterations=10):
-  while 1:
+
+  for i in range (0, iterations):
     try:
       print "[" + str(i) + "]" + " Starting test_new_resume_delay_loop()"
       client.test_new_session()
@@ -55,7 +58,7 @@ def nx4_worker(info):
   else:
     test(client, uri, user, passwd)
 
-  client.quit()
+  client.done()
 
 
 # number of iterations
@@ -90,7 +93,7 @@ if __name__ == '__main__':
 
   for usr in _users:
     lp_obj = {
-        'test': test_resume_session_loop,
+        'test': test_new_resume_delay_loop,
         'uri': _uri,
         'user': usr,
         'passwd': _passwd,
