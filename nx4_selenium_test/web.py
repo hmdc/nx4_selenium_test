@@ -123,10 +123,6 @@ class client:
 
       #print("Waiting for the new desktop button..")
 
-      # NoMachine thinks they're clever by making this more difficult,
-      # but, I found it. I'm pretty sure I can crash their poorly
-      # designed application some more.
-
       #_new_desktop_click = driver.find_element_by_xpath('/html/body/div[1]/div[3]/div/div[1]/div[2]/div[1]/div[2]/span')
 
       #_new_desktop_click = WebDriverWait(driver, _GLBOAL_TIMEOUT).until(
